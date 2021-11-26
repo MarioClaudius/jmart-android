@@ -1,0 +1,2 @@
+rootProject.name = "jmart-android"
+include ':app'
