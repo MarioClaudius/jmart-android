@@ -34,6 +34,13 @@ public class LoginActivity extends AppCompatActivity{
         EditText edtPasswordLogin = findViewById(R.id.edittext_password_login);
         Button btnLogin = findViewById(R.id.button_login);
         TextView tvCreateAccount = findViewById(R.id.textview_register);
+        tvCreateAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
