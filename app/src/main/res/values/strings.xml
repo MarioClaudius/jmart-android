@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">jmart-android</string>
+    <string-array name="shipmentPlans">
+        <item>INSTANT</item>
+        <item>SAME DAY</item>
+        <item>NEXT DAY</item>
+        <item>REGULER</item>
+        <item>KARGO</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
