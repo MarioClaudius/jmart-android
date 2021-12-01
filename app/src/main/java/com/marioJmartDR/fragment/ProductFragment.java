@@ -7,8 +7,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.marioJmartDR.R;
+import com.marioJmartDR.model.Product;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +22,10 @@ import com.marioJmartDR.R;
  * create an instance of this fragment.
  */
 public class ProductFragment extends Fragment {
+    String[] mobileArray = {"Android","IPhone","WindowsMobile","Blackberry",
+            "WebOS","Ubuntu","Windows7","Max OS X"};
+
+    List<Product> productList = new ArrayList<>();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,6 +71,11 @@ public class ProductFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_product, container, false);
+        View v = inflater.inflate(R.layout.fragment_product, container, false);
+        ArrayAdapter adapter = new ArrayAdapter<String>(getContext(), R.layout.row_product_list, mobileArray);
+//        ArrayAdapter adapter = new ArrayAdapter<Product>(getContext(), R.layout.row_product_list, productList);
+        ListView listView = v.findViewById(R.id.product_list);
+        listView.setAdapter(adapter);
+        return v;
     }
 }

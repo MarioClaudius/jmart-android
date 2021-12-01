@@ -9,7 +9,7 @@
         android:iconTint="@color/white"/>
 
     <item
-        android:id="@+id/add"
+        android:id="@+id/addbox"
         android:icon="@drawable/ic_baseline_add_box_24"
         android:title="add"
         app:showAsAction="always"

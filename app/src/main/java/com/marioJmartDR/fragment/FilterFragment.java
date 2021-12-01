@@ -7,8 +7,19 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.marioJmartDR.R;
+import com.marioJmartDR.model.ProductCategory;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +72,31 @@ public class FilterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_filter, container, false);
+        View v = inflater.inflate(R.layout.fragment_filter, container, false);
+        EditText edtName = v.findViewById(R.id.edt_name_filter);
+        EditText edtLowestPrice = v.findViewById(R.id.edt_lowest_price_filter);
+        EditText edtHighestPrice = v.findViewById(R.id.edt_highest_price_filter);
+        CheckBox checkBoxNew = v.findViewById(R.id.checkbox_new);
+        CheckBox checkBoxUsed = v.findViewById(R.id.checkbox_used);
+        Spinner spinner = v.findViewById(R.id.spinner);
+
+        List<String> list = new ArrayList<>();
+        for(ProductCategory category : ProductCategory.values()){
+            list.add(category.toString());
+        }
+        ArrayAdapter<String> adapter = new ArrayAdapter(getContext(), R.layout.row_product_category, list);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getContext(), adapter.getItem(i), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        return v;
     }
 }

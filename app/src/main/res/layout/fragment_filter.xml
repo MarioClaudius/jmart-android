@@ -1,14 +1,203 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context=".fragment.FilterFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="INI FILTER FRAGMENT" />
+        android:layout_height="match_parent">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_name_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"/>
+
+            <EditText
+                android:id="@+id/edt_name_filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/tv_name_filter"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"/>
+
+            <TextView
+                android:id="@+id/tv_lowest_price_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/edt_name_filter"
+                android:text="Lowest Price"
+                android:labelFor="@+id/edt_lowest_price_filter"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"/>
+
+            <EditText
+                android:id="@+id/edt_lowest_price_filter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:lines="1"
+                app:layout_constraintHorizontal_weight="5"
+                app:layout_constraintTop_toBottomOf="@+id/tv_lowest_price_filter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_to_filter"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                android:layout_marginStart="15dp"/>
+
+            <TextView
+                android:id="@+id/tv_to_filter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/edt_lowest_price_filter"
+                app:layout_constraintEnd_toStartOf="@id/edt_highest_price_filter"
+                android:text="to"
+                android:gravity="center"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintTop_toBottomOf="@id/tv_lowest_price_filter"
+                android:layout_marginTop="10dp"/>
+
+            <EditText
+                android:id="@+id/edt_highest_price_filter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/tv_to_filter"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:inputType="number"
+                app:layout_constraintTop_toBottomOf="@id/tv_lowest_price_filter"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintHorizontal_weight="5"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Highest Price"
+                android:labelFor="@+id/edt_highest_price_filter"
+                app:layout_constraintStart_toEndOf="@id/tv_to_filter"
+                app:layout_constraintTop_toBottomOf="@id/edt_name_filter"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/tv_product_condition_filter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Product Condition"
+                app:layout_constraintEnd_toStartOf="@id/layout_checkbox_new"
+                app:layout_constraintTop_toBottomOf="@+id/edt_lowest_price_filter"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="5"
+                android:layout_marginTop="25dp"
+                android:layout_marginStart="20dp"/>
+
+            <LinearLayout
+                android:id="@+id/layout_checkbox_new"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintEnd_toStartOf="@id/layout_checkbox_used"
+                app:layout_constraintStart_toEndOf="@id/tv_product_condition_filter"
+                app:layout_constraintTop_toBottomOf="@id/edt_lowest_price_filter">
+
+                <CheckBox
+                    android:id="@+id/checkbox_new"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_checkbox_used"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintHorizontal_weight="2"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toEndOf="@id/layout_checkbox_new"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/edt_lowest_price_filter">
+
+                <CheckBox
+                    android:id="@+id/checkbox_used"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Used"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_product_category_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product Category"
+                app:layout_constraintTop_toBottomOf="@id/tv_product_condition_filter"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="25dp"/>
+            
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_product_condition_filter"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="15dp"/>
+
+            <Button
+                android:id="@+id/btn_apply_filter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="APPLY"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_cancel_filter"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintHorizontal_weight="1"
+                android:layout_marginBottom="20dp"/>
+
+            <Button
+                android:id="@+id/btn_cancel_filter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="CANCEL"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btn_apply_filter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_weight="1"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="20dp"/>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
