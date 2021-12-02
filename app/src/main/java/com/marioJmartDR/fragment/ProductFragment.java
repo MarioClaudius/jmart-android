@@ -8,11 +8,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import com.marioJmartDR.AboutMeActivity;
 import com.marioJmartDR.R;
 import com.marioJmartDR.model.Product;
+import com.marioJmartDR.request.RequestFactory;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +44,8 @@ public class ProductFragment extends Fragment {
             "WebOS","Ubuntu","Windows7","Max OS X"};
 
     List<Product> productList = new ArrayList<>();
+    List<String> productNameList = new ArrayList<>();
+    private static final Gson gson = new Gson();
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -72,10 +92,42 @@ public class ProductFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_product, container, false);
-        ArrayAdapter adapter = new ArrayAdapter<String>(getContext(), R.layout.row_product_list, mobileArray);
-//        ArrayAdapter adapter = new ArrayAdapter<Product>(getContext(), R.layout.row_product_list, productList);
+        EditText edtPage = v.findViewById(R.id.edt_page);
+        Button prevBtn = v.findViewById(R.id.prev_btn);
+        Button nextBtn = v.findViewById(R.id.next_btn);
         ListView listView = v.findViewById(R.id.product_list);
-        listView.setAdapter(adapter);
+//        ArrayAdapter adapter = new ArrayAdapter<String>(getContext(), R.layout.row_product_list, mobileArray);
+
+        Response.Listener<String> listener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray object = new JSONArray(response);
+                    Type productListType = new TypeToken<ArrayList<Product>>(){}.getType();
+                    productList = gson.fromJson(response, productListType);
+//                    JsonArray object = new JsonParser().parse(response).getAsJsonArray();//new JSONArray(response);
+//                    productList = gson.fromJson(response, productList.getClass());
+                    for(Product p : productList){
+                        productNameList.add(p.name);
+                    }
+                    ArrayAdapter adapter = new ArrayAdapter<String>(getContext(), R.layout.row_product_list, productNameList);
+                    listView.setAdapter(adapter);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(), "ERROR", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(RequestFactory.getPage("product", 0, 15, listener, errorListener));
+//        ArrayAdapter adapter = new ArrayAdapter<Product>(getContext(), R.layout.row_product_list, productList);
         return v;
     }
 }

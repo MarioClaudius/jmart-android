@@ -299,7 +299,7 @@
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_address_store"
-                        tools:text="Phone Number" />
+                        android:text="Phone Number" />
 
                     <TextView
                         android:id="@+id/tv_phonenumber_content_store"

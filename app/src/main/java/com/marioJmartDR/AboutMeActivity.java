@@ -17,6 +17,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.marioJmartDR.model.Account;
+import com.marioJmartDR.model.Store;
+import com.marioJmartDR.request.RegisterStoreRequest;
 import com.marioJmartDR.request.RequestFactory;
 import com.marioJmartDR.request.TopUpRequest;
 
@@ -59,6 +61,9 @@ public class AboutMeActivity extends AppCompatActivity {
             cvStore.setVisibility(View.VISIBLE);
             cvRegisterStore.setVisibility(View.GONE);
             registerStoreBtn.setVisibility(View.GONE);
+            tvStoreName.setText(account.store.name);
+            tvStoreAddress.setText(account.store.address);
+            tvStorePhoneNumber.setText(account.store.phoneNumber);
         }
         else{
             registerStoreBtn.setVisibility(View.VISIBLE);
@@ -93,7 +98,8 @@ public class AboutMeActivity extends AppCompatActivity {
                         Boolean object = Boolean.valueOf(response);
                         if(object){
                             Toast.makeText(AboutMeActivity.this, "Top Up Successful", Toast.LENGTH_SHORT).show();
-                            refreshAccount();
+                            refreshBalance();
+                            edtTopUp.getText().clear();
                         }
                         else {
                             Toast.makeText(AboutMeActivity.this, "Top Up Failed", Toast.LENGTH_SHORT).show();
@@ -116,11 +122,52 @@ public class AboutMeActivity extends AppCompatActivity {
         });
 
         //registerStore
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String storeName = edtName.getText().toString();
+                String storeAddress = edtAddress.getText().toString();
+                String storePhoneNumber = edtPhoneNumber.getText().toString();
+                Response.Listener<String> listener = new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject object = null;
+                        try {
+                            Log.d("RESPONSE NYA ADALAH 1", response);
+                            object = new JSONObject(response);
+                            if(object != null){
+                                Toast.makeText(AboutMeActivity.this, "Store registered successfully", Toast.LENGTH_SHORT).show();
+                            }
+                            account.store = gson.fromJson(object.toString(), Store.class);
+                            tvStoreName.setText(account.store.name);
+                            tvStoreAddress.setText(account.store.address);
+                            tvStorePhoneNumber.setText(account.store.phoneNumber);
+                            cvRegisterStore.setVisibility(View.GONE);
+                            cvStore.setVisibility(View.VISIBLE);
+                        } catch (JSONException e) {
+                            Toast.makeText(AboutMeActivity.this, "Register Store Failed", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                            Log.d("RESPONSE NYA ADALAH 2", response);
+                        }
+                    }
+                };
 
-        //cancel
+                Response.ErrorListener errorListener = new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(AboutMeActivity.this, "Register Store Failed Connection", Toast.LENGTH_SHORT).show();
+                        Log.d("ERROR", error.toString());
+                    }
+                };
+
+                RegisterStoreRequest registerStoreRequest = new RegisterStoreRequest(account.id, storeName, storeAddress, storePhoneNumber, listener, errorListener);
+                RequestQueue queue = Volley.newRequestQueue(AboutMeActivity.this);
+                queue.add(registerStoreRequest);
+            }
+        });
     }
 
-    public void refreshAccount(){
+    public void refreshBalance(){
         Response.Listener<String> listener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

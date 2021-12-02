@@ -5,7 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:textSize="16dp"
     android:textStyle="bold"
-    android:padding="10dp"
+    android:paddingStart="20dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:background="@drawable/custom_border_top_bottom"
+
     tools:text="TEST" />
 
 
