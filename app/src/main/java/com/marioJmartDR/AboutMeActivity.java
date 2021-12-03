@@ -172,7 +172,6 @@ public class AboutMeActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    Log.d("MASUK REFRESH", response);
                     JSONObject object = new JSONObject(response);
                     account = gson.fromJson(response, Account.class);
                     tvBalance.setText("" + account.balance);

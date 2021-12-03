@@ -135,7 +135,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_condition_create_product"
                 android:layout_marginEnd="25dp"
-                android:layout_marginTop="25dp"/>
+                android:layout_marginTop="18dp"
+                android:gravity="end"/>
 
             <TextView
                 android:id="@+id/tv_shipment_plan_create_product"
@@ -155,7 +156,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_category_create_product"
                 android:layout_marginEnd="25dp"
-                android:layout_marginTop="25dp"/>
+                android:layout_marginTop="18dp"
+                android:gravity="end"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
