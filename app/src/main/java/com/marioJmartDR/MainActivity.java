@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -32,8 +35,6 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-//import com.marioJmartDR.fragment.FilterFragment;
-//import com.marioJmartDR.fragment.ProductFragment;
 import com.marioJmartDR.model.Account;
 import com.marioJmartDR.model.Product;
 import com.marioJmartDR.model.ProductCategory;
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     private Account account;
     private CustomAdapter customAdapter;
     public boolean applyFilter = false;
+    private Dialog dialog;
+    public static Product productSelectedToBuy = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -396,7 +399,47 @@ public class MainActivity extends AppCompatActivity {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    dialog = new Dialog(view.getContext());
+                    dialog.setContentView(R.layout.dialog_product_detail);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView tvDetailProductName = dialog.findViewById(R.id.tv_product_name_detail);
+                    TextView tvDetailProductWeight = dialog.findViewById(R.id.tv_product_weight_detail);
+                    TextView tvDetailProductCondition = dialog.findViewById(R.id.tv_product_condition_detail);
+                    TextView tvDetailProductCategory = dialog.findViewById(R.id.tv_product_category_detail);
+                    TextView tvDetailProductPrice = dialog.findViewById(R.id.tv_product_price_detail);
+                    TextView tvDetailProductDiscount = dialog.findViewById(R.id.tv_product_discount_detail);
+                    Button btnBuy = dialog.findViewById(R.id.btn_buy_detail_product);
+                    Button btnCancel = dialog.findViewById(R.id.btn_cancel_product_detail);
+                    Product productSelected = productListFiltered.get(i);
+                    tvDetailProductName.setText(productSelected.name);
+                    tvDetailProductWeight.setText(productSelected.weight + " Kg");
+                    if(productSelected.conditionUsed){
+                        tvDetailProductCondition.setText("NEW");
+                    }
+                    else {
+                        tvDetailProductCondition.setText("USED");
+                    }
+                    tvDetailProductCategory.setText(productSelected.category.toString());
+                    tvDetailProductPrice.setText("Rp " + productSelected.price);
+                    tvDetailProductDiscount.setText(productSelected.discount + "%");
+                    btnCancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
 
+                    btnBuy.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                            productSelectedToBuy = productSelected;
+                            Intent intent = new Intent(MainActivity.this, PaymentActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+                    dialog.show();
+                    Toast.makeText(MainActivity.this, productListFiltered.get(i).name, Toast.LENGTH_SHORT).show();
                 }
             });
             return v;
@@ -423,8 +466,6 @@ public class MainActivity extends AppCompatActivity {
                             if(p.name.toLowerCase().contains(searchStr)){
                                 resultData.add(p);
                             }
-//                            filterResults.count = resultData.size();
-//                            filterResults.values = resultData;
                         }
 
                         filterResults.count = resultData.size();
@@ -441,5 +482,9 @@ public class MainActivity extends AppCompatActivity {
             };
             return filter;
         }
+    }
+
+    public static Product getProductSelectedToBuy(){
+        return productSelectedToBuy;
     }
 }

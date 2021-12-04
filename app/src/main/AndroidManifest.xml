@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Jmartandroid"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AboutMeActivity"></activity>
+        <activity android:name=".PaymentActivity"></activity>
+        <activity android:name=".AboutMeActivity" />
         <activity android:name=".CreateProductActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".RegisterActivity" />
