@@ -54,6 +54,7 @@ public class AboutMeActivity extends AppCompatActivity {
         edtAddress = findViewById(R.id.edt_address_store_account);
         edtPhoneNumber = findViewById(R.id.edt_phonenumber_store_account);
         account = LoginActivity.getLoggedAccount();
+        refreshBalance();
         tvName.setText(account.name);
         tvEmail.setText(account.email);
         tvBalance.setText("" + account.balance);

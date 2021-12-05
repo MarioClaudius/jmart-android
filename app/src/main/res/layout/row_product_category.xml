@@ -7,5 +7,4 @@
     android:textColor="@color/black"
     tools:text="BOOK"
     android:padding="10dp">
-
 </TextView>

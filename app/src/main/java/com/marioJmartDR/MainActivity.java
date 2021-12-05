@@ -43,6 +43,7 @@ import com.marioJmartDR.request.RequestFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -487,4 +488,5 @@ public class MainActivity extends AppCompatActivity {
     public static Product getProductSelectedToBuy(){
         return productSelectedToBuy;
     }
+
 }
