@@ -3,6 +3,7 @@ package com.marioJmartDR;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,22 +17,32 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.marioJmartDR.model.Account;
+import com.marioJmartDR.model.Invoice;
+import com.marioJmartDR.model.Payment;
 import com.marioJmartDR.model.Store;
+import com.marioJmartDR.request.GetInvoiceRequest;
 import com.marioJmartDR.request.RegisterStoreRequest;
 import com.marioJmartDR.request.RequestFactory;
 import com.marioJmartDR.request.TopUpRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
 public class AboutMeActivity extends AppCompatActivity {
     private CardView cvRegisterStore, cvStore;
-    private Button registerStoreBtn, topUpBtn, registerBtn, cancelBtn;
+    private Button registerStoreBtn, topUpBtn, registerBtn, cancelBtn, checkAccountInvoiceBtn, checkStoreInvoiceBtn;
     private TextView tvName, tvEmail, tvBalance, tvStoreName, tvStoreAddress, tvStorePhoneNumber;
     private EditText edtTopUp, edtName, edtAddress, edtPhoneNumber;
     private Account account;
     private static final Gson gson = new Gson();
+    List<Payment> paymentList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +64,8 @@ public class AboutMeActivity extends AppCompatActivity {
         edtName = findViewById(R.id.edt_name_store_account);
         edtAddress = findViewById(R.id.edt_address_store_account);
         edtPhoneNumber = findViewById(R.id.edt_phonenumber_store_account);
+        checkAccountInvoiceBtn = findViewById(R.id.btn_check_account_invoice);
+        checkStoreInvoiceBtn = findViewById(R.id.btn_check_store_invoice);
         account = LoginActivity.getLoggedAccount();
         refreshBalance();
         tvName.setText(account.name);
@@ -164,6 +177,24 @@ public class AboutMeActivity extends AppCompatActivity {
                 RegisterStoreRequest registerStoreRequest = new RegisterStoreRequest(account.id, storeName, storeAddress, storePhoneNumber, listener, errorListener);
                 RequestQueue queue = Volley.newRequestQueue(AboutMeActivity.this);
                 queue.add(registerStoreRequest);
+            }
+        });
+
+        checkAccountInvoiceBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AboutMeActivity.this, InvoiceHistoryActivity.class);
+                intent.putExtra("byAccount", true);
+                startActivity(intent);
+            }
+        });
+
+        checkStoreInvoiceBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AboutMeActivity.this, InvoiceHistoryActivity.class);
+                intent.putExtra("byAccount", false);
+                startActivity(intent);
             }
         });
     }

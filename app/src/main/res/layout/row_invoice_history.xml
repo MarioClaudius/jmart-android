@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cv_payment_invoice"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:clickable="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardElevation="10dp">
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:id="@+id/cv_payment_invoice"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:cardElevation="10dp"-->
+<!--        android:clickable="true">-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
+
+            <TextView
+                android:id="@+id/tv_buyer_name_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Buyer Name : "
+                android:textSize="18sp"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="1"
+                android:fontFamily="@font/comfortaa"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/black"
+                android:layout_marginStart="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_content_buyer_name_payment"/>
+
+            <TextView
+                android:id="@+id/tv_content_buyer_name_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="Mario Claudius"
+                android:textSize="20sp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="@color/black"
+                app:layout_constraintHorizontal_weight="1"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintStart_toEndOf="@+id/tv_buyer_name_payment"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_date_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_buyer_name_payment"
+                app:layout_constraintEnd_toStartOf="@+id/tv_content_date_payment"
+                android:text="Date : "
+                android:textSize="18sp"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="1"
+                android:layout_marginStart="15dp"
+                android:fontFamily="@font/comfortaa"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/tv_content_date_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@+id/tv_date_payment"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_buyer_name_payment"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="20sp"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textColor="@color/black"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintHorizontal_weight="1"
+                tools:text="17 Desember 2021"/>
+
+            <TextView
+                android:id="@+id/tv_shipment_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Shipment : "
+                android:textColor="@color/black"
+                android:fontFamily="@font/comfortaa"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_date_payment"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_content_shipment_payment"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="1"
+                android:layout_marginStart="15dp"/>
+
+            <TextView
+                android:id="@+id/tv_content_shipment_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:text="INSTANT"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_date_payment"
+                app:layout_constraintStart_toEndOf="@+id/tv_shipment_payment"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintHorizontal_weight="1"/>
+
+            <TextView
+                android:id="@+id/tv_address_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Address : "
+                android:fontFamily="@font/comfortaa"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_shipment_payment"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_content_address_payment"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="1"
+                android:layout_marginStart="15dp"/>
+
+            <TextView
+                android:id="@+id/tv_content_address_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:text="Jalan Universitas Indonesia No 10"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toEndOf="@+id/tv_address_payment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_shipment_payment"
+                android:textSize="20sp"
+                app:layout_constraintHorizontal_weight="1"
+                android:layout_marginEnd="15dp"
+                android:fontFamily="@font/montserrat_semibold"/>
+
+            <TextView
+                android:id="@+id/tv_product_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Produk :"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_address_payment"
+                app:layout_constraintEnd_toStartOf="@+id/tv_content_product_count_payment"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                android:fontFamily="@font/comfortaa"
+                android:textColor="@color/black"
+                android:layout_marginStart="15dp"
+                android:textSize="18sp"
+                app:layout_constraintHorizontal_weight="1"/>
+
+            <TextView
+                android:id="@+id/tv_content_product_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:text="Buku Biru"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                app:layout_constraintHorizontal_weight="1"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_address_payment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_product_count_payment"/>
+
+            <TextView
+                android:id="@+id/tv_product_count_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Total Item :"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_product_payment"
+                app:layout_constraintEnd_toStartOf="@+id/tv_content_product_count_payment"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                android:fontFamily="@font/comfortaa"
+                android:textColor="@color/black"
+                android:layout_marginStart="15dp"
+                android:textSize="18sp"
+                app:layout_constraintHorizontal_weight="1"/>
+
+            <TextView
+                android:id="@+id/tv_content_product_count_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:text="2"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                app:layout_constraintHorizontal_weight="1"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_product_payment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_product_count_payment"/>
+
+            <TextView
+                android:id="@+id/tv_total_price_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Total Price :"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_product_count_payment"
+                app:layout_constraintEnd_toStartOf="@+id/tv_content_total_price_payment"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                android:fontFamily="@font/comfortaa"
+                android:textColor="@color/black"
+                android:layout_marginStart="15dp"
+                android:textSize="18sp"
+                app:layout_constraintHorizontal_weight="1"/>
+
+            <TextView
+                android:id="@+id/tv_content_total_price_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:text="Rp 10000"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                app:layout_constraintHorizontal_weight="1"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_product_count_payment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_total_price_payment"/>
+
+            <TextView
+                android:id="@+id/tv_status_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Status :"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_total_price_payment"
+                app:layout_constraintEnd_toStartOf="@+id/tv_content_status_payment"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                android:fontFamily="@font/comfortaa"
+                android:textColor="@color/black"
+                android:layout_marginStart="15dp"
+                android:textSize="18sp"
+                app:layout_constraintHorizontal_weight="1"/>
+
+            <TextView
+                android:id="@+id/tv_content_status_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:text="FAILED"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                app:layout_constraintHorizontal_weight="1"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_total_price_payment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_status_payment"/>
+
+            <TextView
+                android:id="@+id/tv_message_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Message :"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_status_payment"
+                app:layout_constraintEnd_toStartOf="@+id/tv_content_message_payment"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                android:fontFamily="@font/comfortaa"
+                android:textColor="@color/black"
+                android:layout_marginStart="15dp"
+                android:textSize="18sp"
+                app:layout_constraintHorizontal_weight="1"/>
+
+            <TextView
+                android:id="@+id/tv_content_message_payment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:text="Payment paid and waiting for the confirmation"
+                android:fontFamily="@font/montserrat_semibold"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                app:layout_constraintHorizontal_weight="1"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_content_status_payment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_message_payment"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--    </androidx.cardview.widget.CardView>-->
+
+</androidx.cardview.widget.CardView>
