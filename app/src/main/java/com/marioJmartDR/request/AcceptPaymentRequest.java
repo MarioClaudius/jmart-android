@@ -7,26 +7,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Request untuk memverifikasi kredensial untuk melakukan login
+ * Request untuk melakukan tindakan accept pada Payment dengan status WAITING_CONFIRMATION oleh toko
  * @author Mario Claudius
  * @version 11 Desember 2021
  */
-public class LoginRequest extends StringRequest {
-    private static final String URL = "http://10.0.2.2:7901/account/login";
+public class AcceptPaymentRequest extends StringRequest {
+    public static final String URL_FORMAT = "http://10.0.2.2:7901/payment/%d/accept";
     private final Map<String, String> params;
 
     /**
-     * Constructor request untuk memverifikasi kredensial untuk melakukan login dengan melakukan POST informasi kredensial suatu akun yaitu email dan password
-     * @param email email suatu akun
-     * @param password password suatu akun
+     * Constructor request untuk melakukan POST id payment untuk melakukan tindakan accept
+     * @param id id dari payment yang akan di-accept
      * @param listener listener jika berhasil terkoneksi ke backend
      * @param errorListener listener jika error tidak terkoneksi ke backend
      */
-    public LoginRequest(String email, String password, Response.Listener<String> listener, Response.ErrorListener errorListener){
-        super(Method.POST, URL, listener, errorListener);
+    public AcceptPaymentRequest(int id, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        super(Method.POST, String.format(URL_FORMAT, id), listener, errorListener);
         params = new HashMap<>();
-        params.put("email", email);
-        params.put("password", password);
+        params.put("id", String.valueOf(id));
     }
 
     /**

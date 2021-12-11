@@ -31,6 +31,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Activity untuk membuat objek Product
+ * @author Mario Claudius
+ * @version 11 Desember 2021
+ */
 public class CreateProductActivity extends AppCompatActivity {
     private EditText edtProductName, edtProductWeight, edtProductPrice, edtProductDiscount;
     private RadioButton radioButtonNew, radioButtonUsed;
@@ -39,6 +44,10 @@ public class CreateProductActivity extends AppCompatActivity {
     private Product product;
     private static final Gson gson = new Gson();
 
+    /**
+     * Method untuk inisialisasi serta event handler pada activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,14 +64,16 @@ public class CreateProductActivity extends AppCompatActivity {
         btnCancel = findViewById(R.id.btn_cancel_create_product);
 
         List<String> productCategoryList = new ArrayList<>();
-        for(ProductCategory category : ProductCategory.values()){
+        for(ProductCategory category : ProductCategory.values()){       //membentuk list string category untuk dimasukkan dalam spinner
             productCategoryList.add(category.toString());
         }
         ArrayAdapter<String> categoryAdapter = new ArrayAdapter(this, R.layout.row_product_category, productCategoryList);
-        spinnerCategory.setAdapter(categoryAdapter);
+        spinnerCategory.setAdapter(categoryAdapter);            //memberi ArrayAdapter dengan list category untuk spinner kategori
 
         ArrayAdapter<String> shipmentPlanAdapter = new ArrayAdapter(this, R.layout.row_product_category, getResources().getStringArray(R.array.shipmentPlans));
-        spinnerShipmentPlan.setAdapter(shipmentPlanAdapter);
+        spinnerShipmentPlan.setAdapter(shipmentPlanAdapter);    //memberi ArrayAdapter dengan list metode pengiriman untuk spinner shipment
+
+        //event handler untuk tombol cancel untuk kembali ke MainActivity (tidak jadi membuat Product)
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,10 +82,10 @@ public class CreateProductActivity extends AppCompatActivity {
             }
         });
 
-        btnCreateProduct.setOnClickListener(new View.OnClickListener() {
+        btnCreateProduct.setOnClickListener(new View.OnClickListener() {        //event handler untuk tombol createProduct
             @Override
             public void onClick(View view) {
-                Account account = LoginActivity.getLoggedAccount();
+                Account account = LoginActivity.getLoggedAccount();         //mengambil informasi akun dari Login Activity
                 String name = edtProductName.getText().toString();
                 String weight = edtProductWeight.getText().toString();
                 String price = edtProductPrice.getText().toString();
@@ -84,8 +95,8 @@ public class CreateProductActivity extends AppCompatActivity {
                 double productDiscount = Double.valueOf(discount);
                 boolean conditionUsed = checkRadioButton(radioButtonNew, radioButtonUsed);
                 ProductCategory category = getProductCategory(spinnerCategory);
-                byte shipmentPlan = getShipmentPlan(spinnerShipmentPlan);
-                Response.Listener<String> listener = new Response.Listener<String>() {
+                byte shipmentPlan = getShipmentPlan(spinnerShipmentPlan);           //mengambil informasi untuk membuat Product
+                Response.Listener<String> listener = new Response.Listener<String>() {      //listener
                     @Override
                     public void onResponse(String response) {
                         JSONObject object = null;
@@ -94,16 +105,16 @@ public class CreateProductActivity extends AppCompatActivity {
                             if(object != null){
                                 Toast.makeText(CreateProductActivity.this, "Product created successfully", Toast.LENGTH_SHORT).show();
                             }
-                            product = gson.fromJson(response, Product.class);
+                            product = gson.fromJson(response, Product.class);       //membentuk object Product dari response request
                             Intent intent = new Intent(CreateProductActivity.this, MainActivity.class);
-                            startActivity(intent);
+                            startActivity(intent);      //kembali ke MainActivity setelah berhasil membuat Product
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 };
 
-                Response.ErrorListener errorListener = new Response.ErrorListener() {
+                Response.ErrorListener errorListener = new Response.ErrorListener() {   //errorListener jika tidak terkoneksi ke backend
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(CreateProductActivity.this, "Create Product Failed Connection", Toast.LENGTH_SHORT).show();
@@ -118,6 +129,12 @@ public class CreateProductActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Method untuk mengecek nilai dari radioButton untuk menentukan boolean conditionUsed
+     * @param newButton radioButton yang merepresentasikan NEW
+     * @param usedButton radioButton yang merepresentasikan USED
+     * @return boolean isUsed
+     */
     public boolean checkRadioButton(RadioButton newButton, RadioButton usedButton){
         boolean isUsed = false;
         if(newButton.isChecked()){
@@ -129,6 +146,11 @@ public class CreateProductActivity extends AppCompatActivity {
         return isUsed;
     }
 
+    /**
+     * Method untuk mendapatkan metode pengiriman yang dipilih berdasarkan nilai dari spinner
+     * @param shipmentPlanSpinner object spinner
+     * @return byte yang merepresentasikan metode pengiriman
+     */
     public byte getShipmentPlan(Spinner shipmentPlanSpinner){
         String shipmentPlan = shipmentPlanSpinner.getSelectedItem().toString();
         if(shipmentPlan.equals("INSTANT")){
@@ -151,6 +173,11 @@ public class CreateProductActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Metode untuk mendapatkan kategori produk dari object spinner
+     * @param productCategorySpinner object spinner
+     * @return enum ProductCategory sesuai nilai spinner
+     */
     public ProductCategory getProductCategory(Spinner productCategorySpinner){
         ProductCategory category = ProductCategory.BOOK;                                //inisialisasi asal
         String productCategory = productCategorySpinner.getSelectedItem().toString();

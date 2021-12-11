@@ -22,10 +22,19 @@ import com.marioJmartDR.request.LoginRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Activity untuk Login
+ * @author Mario Claudius
+ * @version 11 Desember 2021
+ */
 public class LoginActivity extends AppCompatActivity{
     private static final Gson gson = new Gson();
     private static Account loggedAccount = null;
 
+    /**
+     * Method untuk inisialisasi serta event handler pada activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,45 +44,42 @@ public class LoginActivity extends AppCompatActivity{
         EditText edtPasswordLogin = findViewById(R.id.edittext_password_login);
         Button btnLogin = findViewById(R.id.button_login);
         TextView tvCreateAccount = findViewById(R.id.textview_register);
-        tvCreateAccount.setOnClickListener(new View.OnClickListener() {
+        tvCreateAccount.setOnClickListener(new View.OnClickListener() {     //eventhandler untuk text createAccount
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
+                startActivity(intent);      //pindah activity ke register
             }
         });
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {            //eventhandler untuk tombol login
             @Override
             public void onClick(View v) {
                 Response.Listener<String> listener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
-//                            Toast.makeText(LoginActivity.this, "Login Successfully", Toast.LENGTH_SHORT).show();
-                            Log.d("RESPONSE NYA ADALAH 1", response);
                             JSONObject object = new JSONObject(response);
                             if(object != null){
                                 Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                             }
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            loggedAccount = gson.fromJson(response, Account.class);
+                            loggedAccount = gson.fromJson(response, Account.class);     //mengambil object Account dari response
                             startActivity(intent);
                         } catch (JSONException e) {
                             Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
-                            Log.d("RESPONSE NYA ADALAH 2", response);
                         }
 
                     }
                 };
-                Response.ErrorListener errorListener = new Response.ErrorListener() {
+                Response.ErrorListener errorListener = new Response.ErrorListener() {       //errorListener jika tidak terkoneksi ke backend
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(LoginActivity.this, "Login Failed 2", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Login Failed due to Connection", Toast.LENGTH_SHORT).show();
                     }
                 };
                 String email = edtEmailLogin.getText().toString();
-                String password = edtPasswordLogin.getText().toString();
+                String password = edtPasswordLogin.getText().toString();        //mengambil informasi kredensial akun yaitu email dan password dari edittext
                 LoginRequest loginRequest = new LoginRequest(email, password, listener, errorListener);
                 RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
                 queue.add(loginRequest);
@@ -81,6 +87,10 @@ public class LoginActivity extends AppCompatActivity{
         });
     }
 
+    /**
+     * Method untuk mengambil object Account yang dimasukkan saat Login
+     * @return object Account yang dimasukkan saat Login
+     */
     public static Account getLoggedAccount(){
         return loggedAccount;
     }

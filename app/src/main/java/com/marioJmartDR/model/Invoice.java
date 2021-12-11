@@ -2,6 +2,12 @@ package com.marioJmartDR.model;
 
 import java.util.Date;
 
+/**
+ * Model untuk objek Invoice
+ * @author Mario Claudius
+ * @version 11 Desember 2021
+ */
+
 public abstract class Invoice extends Serializable{
     public enum Status
     {

@@ -276,7 +276,7 @@
                         android:text="Address"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_name_store" />
+                        app:layout_constraintTop_toBottomOf="@+id/tv_name_content_store" />
 
                     <TextView
                         android:id="@+id/tv_address_content_store"
@@ -287,7 +287,7 @@
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_name_store"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_name_content_store"
                         tools:text="Jalan Akses UI no. 69" />
 
                     <TextView
@@ -298,7 +298,7 @@
                         android:layout_marginTop="15dp"
                         android:textSize="16sp"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_address_store"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_address_content_store"
                         android:text="Phone Number" />
 
                     <TextView
@@ -310,8 +310,31 @@
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_address_store"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_address_content_store"
                         tools:text="08012931293"/>
+
+                    <TextView
+                        android:id="@+id/tv_store_balance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginStart="15dp"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_phonenumber_content_store"
+                        android:text="Store Balance"/>
+
+                    <TextView
+                        android:id="@+id/tv_content_store_balance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:text="Rp 15000"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_phonenumber_content_store"/>
 
                     <Button
                         android:id="@+id/btn_check_store_invoice"

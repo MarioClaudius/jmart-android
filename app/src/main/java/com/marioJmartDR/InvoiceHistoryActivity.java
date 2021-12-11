@@ -26,6 +26,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity untuk menampilkan list Invoice berdasarkan akun maupun toko
+ * @author Mario Claudius
+ * @version 11 Desember 2021
+ */
 public class InvoiceHistoryActivity extends AppCompatActivity {
     private RecyclerView rvPaymentInvoice;
     private TextView tvAccountOrStore;
@@ -34,12 +39,17 @@ public class InvoiceHistoryActivity extends AppCompatActivity {
     private Account account;
     private boolean byAccount;
 
+    /**
+     * Method untuk nisialisasi serta event handler pada activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invoice_history);
-        byAccount = getIntent().getBooleanExtra("byAccount", false);
-        account = LoginActivity.getLoggedAccount();
+        byAccount = getIntent().getBooleanExtra("byAccount", false);            //mengambil nilai value dari intent
+        account = LoginActivity.getLoggedAccount();                         //mengambil informasi akun dari LoginActivity
+        //inisialisasi
         tvAccountOrStore = findViewById(R.id.tv_account_or_store);
         if(byAccount){
             tvAccountOrStore.setText("Account");
@@ -49,23 +59,24 @@ public class InvoiceHistoryActivity extends AppCompatActivity {
         }
         rvPaymentInvoice = findViewById(R.id.rv_row_invoice_history);
         rvPaymentInvoice.setLayoutManager(new LinearLayoutManager(this));
-        Response.Listener<String> listener = new Response.Listener<String>() {
+
+        Response.Listener<String> listener = new Response.Listener<String>() {      //listener
             @Override
             public void onResponse(String response) {
                 try {
                     paymentList.clear();
                     JSONArray object = new JSONArray(response);
-                    Type paymentListType = new TypeToken<ArrayList<Payment>>(){}.getType();
-                    paymentList = gson.fromJson(response, paymentListType);
-                    ListInvoiceAdapter listInvoiceAdapter = new ListInvoiceAdapter(paymentList);
-                    rvPaymentInvoice.setAdapter(listInvoiceAdapter);
-                } catch (JSONException e) {
+                    Type paymentListType = new TypeToken<ArrayList<Payment>>(){}.getType();     //mengambil tipe list Payment
+                    paymentList = gson.fromJson(response, paymentListType);         //mengambil list Payment dari response
+                    ListInvoiceAdapter listInvoiceAdapter = new ListInvoiceAdapter(paymentList, byAccount);     //membuat adapter (menggunakan recycler view adapter)
+                    rvPaymentInvoice.setAdapter(listInvoiceAdapter);            //memasukkan adapter nya ke recycler view yang menampilkan list
+                } catch (JSONException e) {     //jika response null
                     e.printStackTrace();
                 }
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
+        Response.ErrorListener errorListener = new Response.ErrorListener() {       //errorListener jika tidak terkoneksi ke backend
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(InvoiceHistoryActivity.this, "Get List Failed due to Connection", Toast.LENGTH_SHORT).show();
@@ -75,6 +86,6 @@ public class InvoiceHistoryActivity extends AppCompatActivity {
         GetInvoiceRequest getInvoiceRequest = new GetInvoiceRequest(account.id, byAccount, listener, errorListener);
         RequestQueue queue = Volley.newRequestQueue(InvoiceHistoryActivity.this);
         queue.add(getInvoiceRequest);
-
     }
+
 }

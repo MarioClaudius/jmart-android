@@ -1,5 +1,11 @@
 package com.marioJmartDR.model;
 
+/**
+ * Model untuk objek Product
+ * @author Mario Claudius
+ * @version 11 Desember 2021
+ */
+
 public class Product extends Serializable{
     public String name;
     public int weight;

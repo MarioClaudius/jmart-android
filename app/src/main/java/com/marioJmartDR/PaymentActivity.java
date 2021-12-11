@@ -33,6 +33,11 @@ import com.marioJmartDR.request.TopUpRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Activity untuk membuat dan mendaftarkan object Payment
+ * @author Mario Claudius
+ * @version 11 Desember 2021
+ */
 public class PaymentActivity extends AppCompatActivity {
     private TextView tvProductName, tvProductWeight, tvProductPrice, tvProductDiscount, tvProductCondition, tvProductCategory, tvProductShipmentPlan, tvAccountBalance;
     private Button btnPay, btnCancel;
@@ -45,11 +50,16 @@ public class PaymentActivity extends AppCompatActivity {
     private static final Gson gson = new Gson();
     private Payment payment;
 
+    /**
+     * Method untuk inisialisasi serta event handler pada activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
 
+        //inisialisasi
         tvProductName = findViewById(R.id.tv_product_name_payment);
         tvProductWeight = findViewById(R.id.tv_product_weight_payment);
         tvProductCondition = findViewById(R.id.tv_product_condition_payment);
@@ -65,9 +75,7 @@ public class PaymentActivity extends AppCompatActivity {
         edtTotalItem = findViewById(R.id.edt_total_item);
         edtAddress = findViewById(R.id.edt_address_payment);
         account = LoginActivity.getLoggedAccount();
-        Log.d("BALANCE BEFORE", "" + account.balance);
         refreshAccountInformation();
-        Log.d("BALANCE AFTER", "" + account.balance);
         productSelected = MainActivity.getProductSelectedToBuy();
         tvProductName.setText(productSelected.name);
         tvProductWeight.setText(productSelected.weight + " Kg");
@@ -84,7 +92,7 @@ public class PaymentActivity extends AppCompatActivity {
         tvProductShipmentPlan.setText(getShipmentPlan(productSelected.shipmentPlans));
         tvAccountBalance.setText("Rp " + account.balance);
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
+        btnAdd.setOnClickListener(new View.OnClickListener() {      //event handler untuk tombol add (menambahkan jumlah produk yang ingin dibeli)
             @Override
             public void onClick(View view) {
                 int totalItem = Integer.valueOf(edtTotalItem.getText().toString());
@@ -94,7 +102,7 @@ public class PaymentActivity extends AppCompatActivity {
             }
         });
 
-        btnRemove.setOnClickListener(new View.OnClickListener() {
+        btnRemove.setOnClickListener(new View.OnClickListener() {   //event handler untuk tombol remove (mengurangi jumlah produk yang ingin dibeli)
             @Override
             public void onClick(View view) {
                 int totalItem = Integer.valueOf(edtTotalItem.getText().toString());
@@ -107,18 +115,18 @@ public class PaymentActivity extends AppCompatActivity {
         });
 
         dialog = new Dialog(PaymentActivity.this);
-        btnPay.setOnClickListener(new View.OnClickListener() {
+        btnPay.setOnClickListener(new View.OnClickListener() {      //event handler untuk tombol pay (membuat object Payment)
             @Override
             public void onClick(View view) {
                 double totalPrice = Double.valueOf(tvProductPrice.getText().toString().substring(3));
                 int itemCount = Integer.valueOf(edtTotalItem.getText().toString());
-                String address = edtAddress.getText().toString();
-                if(account.balance >= totalPrice){
-                    dialog.setContentView(R.layout.dialog_confirmation);
+                String address = edtAddress.getText().toString();           //mengambil informasi untuk pembuatan payment
+                if(account.balance >= totalPrice){              //pengecekan jika balance account melebihi harga total
+                    dialog.setContentView(R.layout.dialog_confirmation);        //jika iya membentuk pop up konfirmasi
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     Button btnYes = dialog.findViewById(R.id.btn_yes_payment_confirmation);
                     Button btnNo = dialog.findViewById(R.id.btn_no_payment_confirmation);
-                    btnYes.setOnClickListener(new View.OnClickListener() {
+                    btnYes.setOnClickListener(new View.OnClickListener() {      //event handler untuk tombol yes pada pop up
                         @Override
                         public void onClick(View view) {
                             dialog.dismiss();
@@ -131,36 +139,36 @@ public class PaymentActivity extends AppCompatActivity {
                                         if(object != null){
                                             Toast.makeText(PaymentActivity.this, "Payment created successfully", Toast.LENGTH_SHORT).show();
                                         }
-                                        payment = gson.fromJson(response, Payment.class);
+                                        payment = gson.fromJson(response, Payment.class);       //mengambil object Payment dari response request
                                         Intent intent = new Intent(PaymentActivity.this, MainActivity.class);
-                                        startActivity(intent);
+                                        startActivity(intent);      //setelah mendapatkan informasi Payment, kembali ke Main Activity
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
                                 }
                             };
 
-                            Response.ErrorListener errorListenerCreatePayment = new Response.ErrorListener() {
+                            Response.ErrorListener errorListenerCreatePayment = new Response.ErrorListener() {      //errorListener jika tidak terkoneksi ke backend
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Toast.makeText(PaymentActivity.this, "Create Payment Failed Connection", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(PaymentActivity.this, "Create Payment due to Failed Connection", Toast.LENGTH_SHORT).show();
                                     Log.d("ERROR", error.toString());
                                 }
                             };
-                            CreatePaymentRequest createPaymentRequest = new CreatePaymentRequest(account.id, productSelected.id, itemCount, address, productSelected.shipmentPlans, listenerCreatePayment, errorListenerCreatePayment);
+                            CreatePaymentRequest createPaymentRequest = new CreatePaymentRequest(account.id, productSelected.id, itemCount, address, productSelected.shipmentPlans, productSelected.accountId, listenerCreatePayment, errorListenerCreatePayment);
                             RequestQueue queue = Volley.newRequestQueue(PaymentActivity.this);
                             queue.add(createPaymentRequest);
                         }
                     });
-                    btnNo.setOnClickListener(new View.OnClickListener() {
+                    btnNo.setOnClickListener(new View.OnClickListener() {       //event handler untuk tombol no pada pop up
                         @Override
-                        public void onClick(View view) {
+                        public void onClick(View view) {            //fungsinya menghilangkan pop up
                             dialog.dismiss();
                         }
                     });
                     dialog.show();
                 }
-                else {
+                else {                  //seandainya balance akun lebih kecil dari total harga, maka muncul pop up fail
                     dialog.setContentView(R.layout.dialog_failed_payment);
                     MaterialButton btnOk = dialog.findViewById(R.id.btn_ok_failed);
                     btnOk.setOnClickListener(new View.OnClickListener() {
@@ -174,7 +182,7 @@ public class PaymentActivity extends AppCompatActivity {
             }
         });
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        btnCancel.setOnClickListener(new View.OnClickListener() {           //event handler untuk tombol cancel (pindah activity)
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PaymentActivity.this, MainActivity.class);
@@ -183,7 +191,7 @@ public class PaymentActivity extends AppCompatActivity {
         });
     }
 
-    public String getProductCategory(ProductCategory category){
+    public String getProductCategory(ProductCategory category){     //method untuk mengambil value string kategori produk
         String categoryStr = "-";                                //inisialisasi asal
         for(ProductCategory pc : ProductCategory.values()){
             if(pc == category){
@@ -193,7 +201,7 @@ public class PaymentActivity extends AppCompatActivity {
         return categoryStr;
     }
 
-    public String getShipmentPlan(byte plan){
+    public String getShipmentPlan(byte plan){           //method untuk mengambil value string metode pengiriman dari value byte
         String shipmentPlan;
         if(plan == 1){
             shipmentPlan = "INSTANT";
@@ -213,21 +221,24 @@ public class PaymentActivity extends AppCompatActivity {
         return shipmentPlan;
     }
 
+    /**
+     * Method untuk mengambil informasi dari object Account
+     */
     public void refreshAccountInformation(){
         Response.Listener<String> listener = new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject object = new JSONObject(response);
-                    account = gson.fromJson(response, Account.class);
-                    tvAccountBalance.setText("Rp " + account.balance);
+                    account = gson.fromJson(response, Account.class);       //mengambil object Account
+                    tvAccountBalance.setText("Rp " + account.balance);      //set ulang balance account
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
+        Response.ErrorListener errorListener = new Response.ErrorListener() {       //errorListener jika terkoneksi ke backend
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(PaymentActivity.this, "ERROR", Toast.LENGTH_SHORT).show();

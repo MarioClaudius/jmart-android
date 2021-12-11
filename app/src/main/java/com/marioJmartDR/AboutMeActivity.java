@@ -35,19 +35,29 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity AboutMe berisi profile dan informasi dari akun
+ * @author Mario Claudius
+ * @version 11 Desember 2021
+ */
 public class AboutMeActivity extends AppCompatActivity {
     private CardView cvRegisterStore, cvStore;
     private Button registerStoreBtn, topUpBtn, registerBtn, cancelBtn, checkAccountInvoiceBtn, checkStoreInvoiceBtn;
-    private TextView tvName, tvEmail, tvBalance, tvStoreName, tvStoreAddress, tvStorePhoneNumber;
+    private TextView tvName, tvEmail, tvBalance, tvStoreName, tvStoreAddress, tvStorePhoneNumber, tvStoreBalance;
     private EditText edtTopUp, edtName, edtAddress, edtPhoneNumber;
     private Account account;
     private static final Gson gson = new Gson();
     List<Payment> paymentList = new ArrayList<>();
 
+    /**
+     * Method untuk inisialisasi serta event handler pada activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_me);
+        //inisialisasi
         cvRegisterStore = findViewById(R.id.cv_register_store);
         cvStore = findViewById(R.id.cv_store_information);
         registerStoreBtn = findViewById(R.id.btn_register_store);
@@ -60,18 +70,19 @@ public class AboutMeActivity extends AppCompatActivity {
         tvStoreName = findViewById(R.id.tv_name_content_store);
         tvStoreAddress = findViewById(R.id.tv_address_content_store);
         tvStorePhoneNumber = findViewById(R.id.tv_phonenumber_content_store);
+        tvStoreBalance = findViewById(R.id.tv_content_store_balance);
         edtTopUp = findViewById(R.id.edt_top_up);
         edtName = findViewById(R.id.edt_name_store_account);
         edtAddress = findViewById(R.id.edt_address_store_account);
         edtPhoneNumber = findViewById(R.id.edt_phonenumber_store_account);
         checkAccountInvoiceBtn = findViewById(R.id.btn_check_account_invoice);
         checkStoreInvoiceBtn = findViewById(R.id.btn_check_store_invoice);
-        account = LoginActivity.getLoggedAccount();
-        refreshBalance();
+        account = LoginActivity.getLoggedAccount();                         //mengambil informasi akun dari Login Activity
+        refreshBalance();                                                   //memperbaharui informasi balance
         tvName.setText(account.name);
         tvEmail.setText(account.email);
         tvBalance.setText("" + account.balance);
-        if(account.store != null){
+        if(account.store != null){                          //mengatur kemunculan cardview ketika store sudah terdaftar
             cvStore.setVisibility(View.VISIBLE);
             cvRegisterStore.setVisibility(View.GONE);
             registerStoreBtn.setVisibility(View.GONE);
@@ -79,13 +90,13 @@ public class AboutMeActivity extends AppCompatActivity {
             tvStoreAddress.setText(account.store.address);
             tvStorePhoneNumber.setText(account.store.phoneNumber);
         }
-        else{
+        else{                                               //mengatur kemunculan cardview ketika belum ada store terdaftar
             registerStoreBtn.setVisibility(View.VISIBLE);
             cvRegisterStore.setVisibility(View.GONE);
             cvStore.setVisibility(View.GONE);
         }
 
-        registerStoreBtn.setOnClickListener(new View.OnClickListener() {
+        registerStoreBtn.setOnClickListener(new View.OnClickListener() {        //event handler untuk tombol registerStore untuk memunculkan cardview
             @Override
             public void onClick(View view) {
                 registerStoreBtn.setVisibility(View.GONE);
@@ -93,7 +104,7 @@ public class AboutMeActivity extends AppCompatActivity {
             }
         });
 
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
+        cancelBtn.setOnClickListener(new View.OnClickListener() {       //event handler untuk tombol cancel pada cardview yang muncul setelah tombol registerStore ditekan
             @Override
             public void onClick(View view) {
                 cvRegisterStore.setVisibility(View.GONE);
@@ -101,19 +112,19 @@ public class AboutMeActivity extends AppCompatActivity {
             }
         });
 
-        topUpBtn.setOnClickListener(new View.OnClickListener() {
+        topUpBtn.setOnClickListener(new View.OnClickListener() {        //event handler untuk tombol topup
             @Override
             public void onClick(View view) {
                 String amountTopUp = edtTopUp.getText().toString().trim();
-                double amount = Double.valueOf(amountTopUp);
-                Response.Listener<String> listener = new Response.Listener<String>() {
+                double amount = Double.valueOf(amountTopUp);                    //mengambil informasi jumlah top up dari edittext
+                Response.Listener<String> listener = new Response.Listener<String>() {  //listener untuk request top up
                     @Override
                     public void onResponse(String response) {
-                        Boolean object = Boolean.valueOf(response);
+                        Boolean object = Boolean.valueOf(response);     //karena response dalam bentuk boolean maka parameter response dikonversi ke boolean
                         if(object){
                             Toast.makeText(AboutMeActivity.this, "Top Up Successful", Toast.LENGTH_SHORT).show();
-                            refreshBalance();
-                            edtTopUp.getText().clear();
+                            refreshBalance();           //jika top up berhasil, maka perbaharui informasi balance akun
+                            edtTopUp.getText().clear();     //hilangkan isi edittext
                         }
                         else {
                             Toast.makeText(AboutMeActivity.this, "Top Up Failed", Toast.LENGTH_SHORT).show();
@@ -121,7 +132,7 @@ public class AboutMeActivity extends AppCompatActivity {
                     }
                 };
 
-                Response.ErrorListener errorListener = new Response.ErrorListener() {
+                Response.ErrorListener errorListener = new Response.ErrorListener() {       //errorListener jika gagal terkoneksi ke backend
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(AboutMeActivity.this, "Top Up Failed Connection", Toast.LENGTH_SHORT).show();
@@ -129,16 +140,17 @@ public class AboutMeActivity extends AppCompatActivity {
                     }
                 };
 
-                TopUpRequest topUpRequest = new TopUpRequest(amount, account.id, listener, errorListener);
-                RequestQueue queue = Volley.newRequestQueue(AboutMeActivity.this);
-                queue.add(topUpRequest);
+                TopUpRequest topUpRequest = new TopUpRequest(amount, account.id, listener, errorListener);      //membuat request top up dan memasukkan informasi
+                RequestQueue queue = Volley.newRequestQueue(AboutMeActivity.this);          //membuat queue
+                queue.add(topUpRequest);                            //menambahkan request yang sudah dibuat ke dalam queue
             }
         });
 
-        //registerStore
+        //event handler untuk tombol registerBtn untuk melakukan konfirmasi pendaftaran toko
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //mengambil informasi dari edittext
                 String storeName = edtName.getText().toString();
                 String storeAddress = edtAddress.getText().toString();
                 String storePhoneNumber = edtPhoneNumber.getText().toString();
@@ -147,18 +159,17 @@ public class AboutMeActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         JSONObject object = null;
                         try {
-                            Log.d("RESPONSE NYA ADALAH 1", response);
                             object = new JSONObject(response);
                             if(object != null){
                                 Toast.makeText(AboutMeActivity.this, "Store registered successfully", Toast.LENGTH_SHORT).show();
                             }
-                            account.store = gson.fromJson(object.toString(), Store.class);
+                            account.store = gson.fromJson(object.toString(), Store.class); //mengambil response dari request dan mengubahnya dalam bentuk store
                             tvStoreName.setText(account.store.name);
                             tvStoreAddress.setText(account.store.address);
                             tvStorePhoneNumber.setText(account.store.phoneNumber);
                             cvRegisterStore.setVisibility(View.GONE);
                             cvStore.setVisibility(View.VISIBLE);
-                        } catch (JSONException e) {
+                        } catch (JSONException e) {             //jika response nya null
                             Toast.makeText(AboutMeActivity.this, "Register Store Failed", Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                             Log.d("RESPONSE NYA ADALAH 2", response);
@@ -166,10 +177,10 @@ public class AboutMeActivity extends AppCompatActivity {
                     }
                 };
 
-                Response.ErrorListener errorListener = new Response.ErrorListener() {
+                Response.ErrorListener errorListener = new Response.ErrorListener() {   //errorListener jika tidak terkoneksi ke backend
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(AboutMeActivity.this, "Register Store Failed Connection", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AboutMeActivity.this, "Register Store Failed due to Connection", Toast.LENGTH_SHORT).show();
                         Log.d("ERROR", error.toString());
                     }
                 };
@@ -180,40 +191,44 @@ public class AboutMeActivity extends AppCompatActivity {
             }
         });
 
-        checkAccountInvoiceBtn.setOnClickListener(new View.OnClickListener() {
+        checkAccountInvoiceBtn.setOnClickListener(new View.OnClickListener() {      //event handler untuk cek invoice history berdasarkan akun
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AboutMeActivity.this, InvoiceHistoryActivity.class);
-                intent.putExtra("byAccount", true);
+                Intent intent = new Intent(AboutMeActivity.this, InvoiceHistoryActivity.class);     //intent pindah ke InvoiceHistoruActivity
+                intent.putExtra("byAccount", true);                 //mengirim data boolean melalui intent
                 startActivity(intent);
             }
         });
 
-        checkStoreInvoiceBtn.setOnClickListener(new View.OnClickListener() {
+        checkStoreInvoiceBtn.setOnClickListener(new View.OnClickListener() {        //event handler untuk cek invoice history berdasarkan store
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(AboutMeActivity.this, InvoiceHistoryActivity.class);
-                intent.putExtra("byAccount", false);
+                Intent intent = new Intent(AboutMeActivity.this, InvoiceHistoryActivity.class);     //intent pindah ke InvoiceHistoruActivity
+                intent.putExtra("byAccount", false);                //mengirim data boolean melalui intent
                 startActivity(intent);
             }
         });
     }
 
+    /**
+     * Method untuk memperbaharui informasi balance akun
+     */
     public void refreshBalance(){
-        Response.Listener<String> listener = new Response.Listener<String>() {
+        Response.Listener<String> listener = new Response.Listener<String>() {      //listener request
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject object = new JSONObject(response);
-                    account = gson.fromJson(response, Account.class);
-                    tvBalance.setText("" + account.balance);
+                    account = gson.fromJson(response, Account.class);           //mengambil ulang informasi akun
+                    tvBalance.setText("Rp " + account.balance);                 //mengubah text balance akun dan balance dari store akun tersebut
+                    tvStoreBalance.setText("Rp " + account.store.balance);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         };
 
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
+        Response.ErrorListener errorListener = new Response.ErrorListener() {       //errorListener jika tidak terkoneksi ke backend
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(AboutMeActivity.this, "ERROR", Toast.LENGTH_SHORT).show();
@@ -221,5 +236,14 @@ public class AboutMeActivity extends AppCompatActivity {
         };
         RequestQueue queue = Volley.newRequestQueue(AboutMeActivity.this);
         queue.add(RequestFactory.getById("account", account.id, listener, errorListener));
+    }
+
+    /**
+     * Method yang dijalankan ketika Activity ini kembali menjadi fokus pada android
+     */
+    @Override
+    protected void onResume() {
+        refreshBalance();           //memperbaharui informasi balance pada akun
+        super.onResume();
     }
 }
