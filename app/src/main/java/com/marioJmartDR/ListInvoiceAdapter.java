@@ -84,9 +84,6 @@ public class ListInvoiceAdapter extends RecyclerView.Adapter<ListInvoiceAdapter.
         holder.tvReceipt.setVisibility(View.GONE);
         holder.tvContentReceipt.setVisibility(View.GONE);
         String receipt = payment.shipment.receipt;
-        if(receipt != null){
-            Log.d("ISI RECEIPT 1", receipt);
-        }
         getInvoiceList(holder, payment, lastRecord, isSubmitted, receipt);      //mengambil list
 
         holder.btnAccept.setOnClickListener(new View.OnClickListener() {        //event handler untuk tombol accept
@@ -195,11 +192,9 @@ public class ListInvoiceAdapter extends RecyclerView.Adapter<ListInvoiceAdapter.
                                 if(isSubmitted){
                                     Toast.makeText(holder.cvPaymentInvoice.getContext(), "Payment Submitted", Toast.LENGTH_SHORT).show();
                                     //memperbaharui list setelah melakukan submit
-                                    Log.d("ISI RECEIPT 2", inputReceipt);
                                     getInvoiceList(holder, payment, new Payment.Record(Invoice.Status.ON_DELIVERY, "Payment Submitted"), true, inputReceipt);
                                 }
                                 else {
-                                    Log.d("ISI RECEIPT 2", inputReceipt);
                                     Toast.makeText(holder.cvPaymentInvoice.getContext(), "This payment can't be submitted! " + payment.id, Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -211,38 +206,11 @@ public class ListInvoiceAdapter extends RecyclerView.Adapter<ListInvoiceAdapter.
                                 Toast.makeText(holder.cvPaymentInvoice.getContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
                             }
                         };
-                        Log.d("ISI RECEIPT 3", inputReceipt);
                         SubmitPaymentRequest submitPaymentRequest = new SubmitPaymentRequest(payment.id, inputReceipt, listenerSubmitPayment, errorListenerSubmitPayment);
                         RequestQueue queue = Volley.newRequestQueue(holder.cvPaymentInvoice.getContext());
                         queue.add(submitPaymentRequest);
                     }
                 });
-
-//                Response.Listener<String> listenerSubmitPayment = new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        Boolean isSubmitted = Boolean.valueOf(response);        //response berbentuk boolean pertanda sudah berhasil melakukan submit atau tidak
-//                        if(isSubmitted){
-//                            Toast.makeText(holder.cvPaymentInvoice.getContext(), "Payment Submitted", Toast.LENGTH_SHORT).show();
-//                            //memperbaharui list setelah melakukan submit
-//                            getInvoiceList(holder, payment, new Payment.Record(Invoice.Status.ON_DELIVERY, "Payment Submitted"), true, "INI RECEIPT 2");
-//                        }
-//                        else {
-//                            Toast.makeText(holder.cvPaymentInvoice.getContext(), "This payment can't be submitted!", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                };
-//
-//                Response.ErrorListener errorListenerSubmitPayment = new Response.ErrorListener() {      //errorListener jika tidak terkoneksi ke backend
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(holder.cvPaymentInvoice.getContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
-//                    }
-//                };
-//
-//                SubmitPaymentRequest submitPaymentRequest = new SubmitPaymentRequest(payment.id, "INI RECEIPT", listenerSubmitPayment, errorListenerSubmitPayment);
-//                RequestQueue queue = Volley.newRequestQueue(holder.cvPaymentInvoice.getContext());
-//                queue.add(submitPaymentRequest);
             }
         });
     }

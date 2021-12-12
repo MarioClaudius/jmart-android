@@ -1,5 +1,7 @@
 package com.marioJmartDR.request;
 
+import android.util.Log;
+
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 
@@ -12,7 +14,7 @@ import java.util.Map;
  * @version 11 Desember 2021
  */
 public class SubmitPaymentRequest extends StringRequest {
-    public static final String URL_FORMAT = "http://10.0.2.2:7901/payment/%d/submit?receipt=%s";
+    public static final String URL_FORMAT = "http://10.0.2.2:7901/payment/%d/submit";
     private final Map<String, String> params;
 
     /**
@@ -23,10 +25,10 @@ public class SubmitPaymentRequest extends StringRequest {
      * @param errorListener listener jika error tidak terkoneksi ke backend
      */
     public SubmitPaymentRequest(int id, String receipt, Response.Listener<String> listener, Response.ErrorListener errorListener) {
-        super(Method.POST, String.format(URL_FORMAT, id, receipt), listener, errorListener);
+        super(Method.POST, String.format(URL_FORMAT, id), listener, errorListener);
         params = new HashMap<>();
         params.put("id", String.valueOf(id));
-//        params.put("receipt", receipt);
+        params.put("receipt", receipt);
     }
 
     /**
